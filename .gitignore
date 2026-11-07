@@ -5,7 +5,8 @@
 /Querys/
 
 # Environment variables
-.env*
+.env
+!.env.example
 
 # Virtual environments
 venv/
