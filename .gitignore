@@ -1,0 +1,24 @@
+# Python
+**/__pycache__/
+
+# PostgreSQL
+/Querys/
+
+# Environment variables
+.env*
+
+# Virtual environments
+venv/
+env/
+
+# IDEs
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Credentials and tokens
+credentials.json
+token_gmail_v1.pickle
+
