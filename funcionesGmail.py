@@ -12,8 +12,8 @@ from googleapiclient.errors import HttpError
 
 SCOPES = ["https://www.googleapis.com/auth/gmail.send"]
 _BASE = Path(__file__).resolve().parent
-CREDENTIALS_PATH = os.getenv("GMAIL_CREDENTIALS_PATH", str(_BASE / "credentials.json"))
-TOKEN_PATH = os.getenv("GMAIL_TOKEN_PATH", str(_BASE / "token_gmail_v1.pickle"))
+_CREDENTIALS_FILE = os.getenv("GMAIL_CREDENTIALS_PATH", str(_BASE / "credentials.json"))
+_TOKEN_FILE = os.getenv("GMAIL_TOKEN_PATH", str(_BASE / "token_gmail_v1.pickle"))
 
 def _obtener_credenciales():
     """Carga token guardado; refresca si expiro; solo abre el navegador si hace falta."""
