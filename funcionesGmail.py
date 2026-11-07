@@ -1,4 +1,5 @@
 from email.mime.text import MIMEText
+from pathlib import Path
 import base64
 import os
 import pickle
@@ -8,13 +9,11 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
+
 SCOPES = ["https://www.googleapis.com/auth/gmail.send"]
-
-# Rutas relativas al directorio del repo (donde esta este archivo)
-_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-_CREDENTIALS_FILE = os.path.join(_BASE_DIR, "credentials.json")
-_TOKEN_FILE = os.path.join(_BASE_DIR, "token_gmail_v1.pickle")
-
+_BASE = Path(__file__).resolve().parent
+CREDENTIALS_PATH = os.getenv("GMAIL_CREDENTIALS_PATH", str(_BASE / "credentials.json"))
+TOKEN_PATH = os.getenv("GMAIL_TOKEN_PATH", str(_BASE / "token_gmail_v1.pickle"))
 
 def _obtener_credenciales():
     """Carga token guardado; refresca si expiro; solo abre el navegador si hace falta."""
