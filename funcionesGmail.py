@@ -16,29 +16,25 @@ _CREDENTIALS_FILE = os.getenv("GMAIL_CREDENTIALS_PATH", str(_BASE / "credentials
 _TOKEN_FILE = os.getenv("GMAIL_TOKEN_PATH", str(_BASE / "token_gmail_v1.pickle"))
 
 def _obtener_credenciales():
-    """Carga token guardado; refresca si expiro; solo abre el navegador si hace falta."""
     creds = None
-
-    if os.path.exists(_TOKEN_FILE):
+    b64 = os.getenv("GMAIL_TOKEN_B64")
+    if b64:
+        creds = pickle.loads(base64.b64decode(b64))
+    elif os.path.exists(_TOKEN_FILE):
         with open(_TOKEN_FILE, "rb") as token:
             creds = pickle.load(token)
 
-    if creds and creds.valid:
-        return creds
-
     if creds and creds.expired and creds.refresh_token:
         creds.refresh(Request())
-    else:
-        if not os.path.exists(_CREDENTIALS_FILE):
-            raise FileNotFoundError(
-                f"No se encontro credentials.json en {_CREDENTIALS_FILE}"
-            )
+        if not b64:
+            with open(_TOKEN_FILE, "wb") as token:
+                pickle.dump(creds, token)
+
+    if not creds or not creds.valid:
         flow = InstalledAppFlow.from_client_secrets_file(_CREDENTIALS_FILE, SCOPES)
         creds = flow.run_local_server(port=0)
-
-    with open(_TOKEN_FILE, "wb") as token:
-        pickle.dump(creds, token)
-
+        with open(_TOKEN_FILE, "wb") as token:
+            pickle.dump(creds, token)
     return creds
 
 
